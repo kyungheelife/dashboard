@@ -1,0 +1,3 @@
+[submodule "src/styles/font/NanumSquare"]
+	path = src/styles/font/NanumSquare
+	url = https://github.com/moonspam/NanumSquare.git

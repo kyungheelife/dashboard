@@ -1,0 +1,119 @@
+/* ALL Object */
+*, *::after, *::before {
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+    -webkit-app-region: drag;
+	cursor: default;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'NanumSquare';
+}
+#main {
+    width: 100%;
+    height: 100%;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+}
+
+
+/* Logo Section */
+#logo {
+    width: 100%;
+    height: 70%;
+    text-align: center;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+}
+.logo-svg {
+    width: 45%;
+    height: 100%;
+}
+
+/* Log Section */
+#log {
+    width: 100%;
+    height: 27%;
+}
+
+.log-top {
+    width: 100%;
+    height: 40%;
+    display: table;
+}
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.log-bottom {
+    width: 100%;
+    height: 60%;
+}
+#log-text {
+    text-align: center;
+    font-size: 5.5vw;
+    font-weight: 600;
+}
+
+/* Version Section */
+#version {
+    width: 100%;
+    height: 3%;
+    text-align: center;
+}
+.version-text {
+    font-size: 3vw;
+    font-weight: 600;
+}
+
+/* Prograss Bar */
+#progressBar {
+    width: 90%;
+    height: 30%;
+    display: block;
+    -webkit-appearance: none;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #eee;
+}
+#progressBar-in {
+    width: 0%;
+    height: 100%;
+    border-radius: 8px;
+    background-color: #273238;
+}
+
+.progressBar-error {
+    width: 100% !important;
+    height: 100%;
+    border-radius: 8px;
+    animation: progress-error 2s infinite;
+}
+
+@keyframes progress-error {
+    0% { 
+        background-color: #fc6565;
+    }
+    50% { 
+        background-color: #eee; 
+    }
+    100% { 
+        background-color: #fc6565;
+    }
+}
+
+@keyframes progress-success {
+    0% { 
+        width: 0%;
+    }
+    100% { 
+        width: 100%;
+    }
+}
