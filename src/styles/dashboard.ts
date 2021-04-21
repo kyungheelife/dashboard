@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import backgroundPng from "./images/background.png"
 
 export const SpanText = createGlobalStyle`
   .A350 {
@@ -8,7 +9,6 @@ export const SpanText = createGlobalStyle`
 // const images = require('./images/background.png')
 
 export const DashboardStyle = createGlobalStyle`
-
 /* ======================
 * ======= Main ======= *
 ====================== */ 
@@ -18,7 +18,7 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
-    font-family: 'NanumSquare';
+    font-family: 'NanumSquare', sans-serif;
     color:#ffffff;
 
     background-color: #000;
@@ -165,7 +165,7 @@ div#watermark {
     background: linear-gradient(
         rgba(0, 0, 0, 0.5), 
         rgba(0, 0, 0, 0.5)
-      ),url(https://cloudflare-ipfs.com/ipfs/QmXX2fL8VoQ8YJLWtJjt4jc8qGv6mSbcKtuoDBypro9pcN);
+      ),url(${backgroundPng});
     background-size: cover;
     transform: scale(1.2);
     filter: blur(3px);

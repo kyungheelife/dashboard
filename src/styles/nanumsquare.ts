@@ -1,36 +1,52 @@
 import { createGlobalStyle } from 'styled-components'
 
+import NanumSquareREot from './fonts/NanumSquareR.eot'
+import NanumSquareRWoff from './fonts/NanumSquareR.woff' 
+import NanumSquareRTTf from './fonts/NanumSquareR.ttf'
+
+import NanumSquareBEot from './fonts/NanumSquareB.eot'
+import NanumSquareBWoff from './fonts/NanumSquareB.woff'
+import NanumSquareBTTf from './fonts/NanumSquareB.ttf'
+
+import NanumSquareEBEot from './fonts/NanumSquareEB.eot'
+import NanumSquareEBWoff from './fonts/NanumSquareEB.woff'
+import NanumSquareEBTTf from './fonts/NanumSquareEB.ttf'
+
+import NanumSquareLEot from './fonts/NanumSquareL.eot'
+import NanumSquareLWoff from './fonts/NanumSquareL.woff'
+import NanumSquareLTTf from './fonts/NanumSquareL.ttf'
+
 export const NanumSquare = createGlobalStyle`
 @font-face {
     font-family: 'NanumSquare';
     font-weight: 400;
-    src: url(${require('./font/NanumSquareR.eot')});
-    src: url(${require('./font/NanumSquareR.eot?#iefix')} format('embedded-opentype'),
-         url(${require('./font/NanumSquareR.woff')} format('woff'),
-         url(${require('./font/NanumSquareR.ttf')} format('truetype');
+    src: url(${NanumSquareREot});
+    src: url(${NanumSquareREot}#iefix format('embedded-opentype'),
+         url(${NanumSquareRWoff} format('woff'),
+         url(${NanumSquareRTTf} format('truetype');
    }
    @font-face {
     font-family: 'NanumSquare';
     font-weight: 700;
-    src: url(${require('./font/NanumSquareB.eot')};
-    src: url(${require('./font/NanumSquareB.eot?#iefix')} format('embedded-opentype'),
-         url(${require('./font/NanumSquareB.woff')} format('woff'),
-         url(${require('./font/NanumSquareB.ttf')} format('truetype');
+    src: url(${NanumSquareBEot};
+    src: url(${NanumSquareBEot}#iefix format('embedded-opentype'),
+         url(${NanumSquareBWoff} format('woff'),
+         url(${NanumSquareBTTf} format('truetype');
    }
    @font-face {
     font-family: 'NanumSquare';
     font-weight: 800;
-    src: url(${require('./font/NanumSquareEB.eot')};
-    src: url(${require('./font/NanumSquareEB.eot?#iefix')} format('embedded-opentype'),
-         url(${require('./font/NanumSquareEB.woff')} format('woff'),
-         url(${require('./font/NanumSquareEB.ttf')} format('truetype');
+    src: url(${NanumSquareEBEot};
+    src: url(${NanumSquareEBEot}#iefix format('embedded-opentype'),
+         url(${NanumSquareEBWoff} format('woff'),
+         url(${NanumSquareEBTTf} format('truetype');
    }
    @font-face {
     font-family: 'NanumSquare';
     font-weight: 300;
-    src: url(${require('./font/NanumSquareL.eot')};
-    src: url(${require('./font/NanumSquareL.eot?#iefix')} format('embedded-opentype'),
-         url(${require('./font/NanumSquareL.woff')} format('woff'),
-         url(${require('./font/NanumSquareL.ttf')} format('truetype');
+    src: url(${NanumSquareLEot};
+    src: url(${NanumSquareLEot}#iefix format('embedded-opentype'),
+         url(${NanumSquareLWoff} format('woff'),
+         url(${NanumSquareLTTf} format('truetype');
    }
    `
