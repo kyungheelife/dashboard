@@ -9,7 +9,7 @@ module.exports = {
   },
   devtool: 'source-map',
   mode: process.env.NODE_ENV,
-  entry: path.resolve(rootPath, 'electron', 'main.ts'),
+  entry: path.resolve(rootPath, 'src', 'main.ts'),
   target: 'electron-main',
   module: {
     rules: [
@@ -25,7 +25,7 @@ module.exports = {
         test: /\.(jpg|jpeg|gif|png|svg|ico)?$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader?limit=100000',
             options: {
               name: 'images/[name].[ext]',
               publicPath: './'
@@ -38,7 +38,7 @@ module.exports = {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader?limit=100000',
             options: {
               name: 'fonts/[name].[ext]',
               publicPath: './'
@@ -57,3 +57,4 @@ module.exports = {
     filename: '[name].js'
   }
 }
+
