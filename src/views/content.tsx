@@ -37,6 +37,10 @@ export default class ContentDIV extends Component {
                     <MealInfo />
                 </div>
             </div>
+            <div id="image_slider">
+                <div className="image_container"></div>
+                <div id="image_num" className="image_num font-weight800">? / ?</div>
+            </div>
         </div>
         );
     }
