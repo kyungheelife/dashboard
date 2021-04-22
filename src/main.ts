@@ -14,7 +14,7 @@ export const OpenDashboard = () => {
             icon:`${__dirname}/build/logo.png`,
             show: true,
             webPreferences: {
-                nodeIntegration: true
+                nodeIntegration: true,
             }
         }
     )
@@ -23,15 +23,14 @@ export const OpenDashboard = () => {
     });
     if (process.env.NODE_ENV === 'development'){
         dash.loadURL('http://localhost:4000')
-        dash.on("closed", () => {
-          app.quit();
-        });
+
     } else {
-        dash.loadURL('file:'+path.join(__dirname, 'src/index.html'))
-        dash.on("closed", () => { 
-          app.quit();
-        });
+        dash.loadURL('file:'+path.join(__dirname, 'renderer/index.html'))
     }
+    dash.on("closed", () => {
+      app.quit();
+    });
+    
 }
 
 app.on("ready", OpenDashboard);
@@ -39,4 +38,4 @@ app.on("ready", OpenDashboard);
 app.on("window-all-closed", () => {
     app.quit();
 });
-app.allowRendererProcessReuse = true;
+app.allowRendererProcessReuse = false;

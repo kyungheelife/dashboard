@@ -1,5 +1,5 @@
-import { TouchBarSlider } from "electron";
-import React, { Component } from "react"
+import React, { Component, FunctionComponent } from "react"
+import axios from 'axios'
 
 
 interface DateInfoConstructor {
@@ -96,27 +96,94 @@ export class EventDIV extends Component {
     }
 }
 
-export class MealInfo extends Component {
+
+
+interface RespMeal {
+    data: string[]
+}
+
+
+class ListLunch extends Component<{}, RespMeal> {
     constructor(props: any) {
         super(props)
-
+        this.state = {
+            data: []
+        }
     }
+    componentDidMount(){
+        const url = "http://127.0.0.1:8074/v1/lunch"
 
+        axios.get(url).then(
+            response => this.setState(
+                { 
+                    data: response.data
+                }
+            )
+        )
+    }
+    public render() {
+        const lca = () => {
+            let a = JSON.parse(JSON.stringify(this.state.data, null, 2))
+            let array = new Array()
+            for(let i in a){
+                array.push(a[i])
+            }
+            let list: string[] = array;
+            console.log(list)
+            return list
+        }
+
+        return (
+            <div id="lunch" className="meal_info-list">{lca().map(str => (<div id="lunch">{str}</div>))}</div>
+        )
+    }   
+}
+
+
+class ListDinner extends Component<{}, RespMeal> {
+    constructor(props: any) {
+        super(props)
+        this.state = {
+            data: []
+        }
+    }
+    componentDidMount(){
+        const url = "http://127.0.0.1:8074/v1/dinner"
+
+        axios.get(url).then(
+            response => this.setState(
+                { 
+                    data: response.data
+                }
+            )
+        )
+    }
+    public render() {
+        const lca = () => {
+            let a = JSON.parse(JSON.stringify(this.state.data, null, 2))
+            let array = new Array()
+            for(let i in a){
+                array.push(a[i])
+            }
+            let list: string[] = array;
+            console.log(list)
+            return list
+        }
+        return (
+            <div id="dinner" className="meal_info-list">{lca().map(str => (<div id="dinner">{str}</div>))}</div>
+        )
+    }   
+}
+
+export class MealInfo extends Component<{}, RespMeal> {
     public render() {
         return (
         <div className="meal_info">
-            <div className="meal_info-lunch">
-                <div className="meal_info-title">중식</div>
-                <div id="lunch" className="meal_info-list">정보를 받아올 수<br />없습니다.</div>
-            </div>
-            <div className="meal_info-dinner">
-                <div className="meal_info-title">석식</div>
-                <div id="dinner" className="meal_info-list">정보를 받아올 수<br /> 없습니다.</div>
-            </div>
+            <div className="meal_info-lunch"><div className="meal_info-title">중식</div><ListLunch /></div>
+            <div className="meal_info-dinner"><div className="meal_info-title">석식</div><ListDinner /></div>
         </div>
         );
     }
-    
 }
 
 export class SchoolInfo extends Component {
