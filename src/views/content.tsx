@@ -31,11 +31,12 @@ export default class ContentDIV extends Component {
                         <WeatherInfo />
                         <WeEventInfo />
                     </div>
-                </div>
-                <div className="right float-right">
-                    <EventDIV />
-                    <MealInfo />
-                </div>
+                
+                    <div className="right float-right">
+                        <EventDIV />
+                        <MealInfo />
+                    </div>
+                </div>.
             </div>
             <div id="image_slider">
                 <div className="image_container"></div>
