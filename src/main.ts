@@ -1,11 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import * as path from 'path'
-import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer'
 
 
-
-const OpenDashboard = () => {
-    const dash = new BrowserWindow(
+export const OpenDashboard = () => {
+     const dash = new BrowserWindow(
         {
             width: 1920,
             height: 1080,
@@ -14,30 +12,31 @@ const OpenDashboard = () => {
             alwaysOnTop: true,
             fullscreen: true,
             icon:`${__dirname}/build/logo.png`,
-            show: false,
+            show: true,
             webPreferences: {
                 nodeIntegration: true
             }
         }
     )
+    dash.once("ready-to-show", () => {
+      dash.show();
+    });
     if (process.env.NODE_ENV === 'development'){
         dash.loadURL('http://localhost:4000')
+        dash.on("closed", () => {
+          app.quit();
+        });
     } else {
         dash.loadURL('file:'+path.join(__dirname, 'src/index.html'))
+        dash.on("closed", () => { 
+          app.quit();
+        });
     }
-
-
 }
-app.on('ready', OpenDashboard)
-  .whenReady()
-  .then(() => {
-    if (process.env.NODE_ENV === 'development') {
-      installExtension(REACT_DEVELOPER_TOOLS)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err))
-      installExtension(REDUX_DEVTOOLS)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err))
-    }
-  })
-app.allowRendererProcessReuse = true
+
+app.on("ready", OpenDashboard);
+
+app.on("window-all-closed", () => {
+    app.quit();
+});
+app.allowRendererProcessReuse = true;

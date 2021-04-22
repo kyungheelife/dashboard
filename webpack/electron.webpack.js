@@ -5,7 +5,7 @@ console.log(path.resolve(__dirname, '..'))
 
 module.exports = {
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jpg','.jpeg', '.gif', '.png', '.svg', '.ico', '.woff', '.woff2', '.eot', '.ttf', '.otf']
+    extensions: ['.tsx', '.ts', '.js']
   },
   devtool: 'source-map',
   mode: process.env.NODE_ENV,
@@ -35,10 +35,10 @@ module.exports = {
       },
       {
         // write files under 10k to inline or copy files over 10k
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        test: /\.(otf|eot|svg|ttf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: [
           {
-            loader: 'url-loader?limit=100000',
+            loader: 'file-loader',
             options: {
               name: 'fonts/[name].[ext]',
               publicPath: './'
@@ -47,6 +47,14 @@ module.exports = {
           },
         ],
       }, 
+      { 
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+        loader: "url-loader?limit=10000&minetype=application/font-woff",
+        options: {
+          name: 'fonts/[name].[ext]',
+          publicPath: './'
+        },
+      },
     ]
   },
   node: {

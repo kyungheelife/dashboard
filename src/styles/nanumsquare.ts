@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle }  from 'styled-components'
 
 import NanumSquareREot from './fonts/NanumSquareR.eot'
 import NanumSquareRWoff from './fonts/NanumSquareR.woff' 
@@ -16,37 +16,40 @@ import NanumSquareLEot from './fonts/NanumSquareL.eot'
 import NanumSquareLWoff from './fonts/NanumSquareL.woff'
 import NanumSquareLTTf from './fonts/NanumSquareL.ttf'
 
+
+console.log(NanumSquareBEot)
+
 export const NanumSquare = createGlobalStyle`
 @font-face {
     font-family: 'NanumSquare';
     font-weight: 400;
     src: url(${NanumSquareREot});
-    src: url(${NanumSquareREot}#iefix format('embedded-opentype'),
+    src: url(${NanumSquareREot} format('embedded-opentype'),
          url(${NanumSquareRWoff} format('woff'),
          url(${NanumSquareRTTf} format('truetype');
-   }
-   @font-face {
-    font-family: 'NanumSquare';
-    font-weight: 700;
-    src: url(${NanumSquareBEot};
-    src: url(${NanumSquareBEot}#iefix format('embedded-opentype'),
-         url(${NanumSquareBWoff} format('woff'),
-         url(${NanumSquareBTTf} format('truetype');
-   }
-   @font-face {
-    font-family: 'NanumSquare';
-    font-weight: 800;
-    src: url(${NanumSquareEBEot};
-    src: url(${NanumSquareEBEot}#iefix format('embedded-opentype'),
-         url(${NanumSquareEBWoff} format('woff'),
-         url(${NanumSquareEBTTf} format('truetype');
-   }
-   @font-face {
-    font-family: 'NanumSquare';
-    font-weight: 300;
-    src: url(${NanumSquareLEot};
-    src: url(${NanumSquareLEot}#iefix format('embedded-opentype'),
-         url(${NanumSquareLWoff} format('woff'),
-         url(${NanumSquareLTTf} format('truetype');
-   }
-   `
+}
+@font-face {
+font-family: 'NanumSquare';
+font-weight: 700;
+src: url(${NanumSquareBEot};
+src: url(${NanumSquareBEot} format('embedded-opentype'),
+      url(${NanumSquareBWoff} format('woff'),
+      url(${NanumSquareBTTf} format('truetype');
+}
+@font-face {
+font-family: 'NanumSquare';
+font-weight: 800;
+src: url(${NanumSquareEBEot};
+src: url(${NanumSquareEBEot} format('embedded-opentype'),
+      url(${NanumSquareEBWoff} format('woff'),
+      url(${NanumSquareEBTTf} format('truetype');
+}
+@font-face {
+font-family: 'NanumSquare';
+font-weight: 300;
+src: url(${NanumSquareLEot};
+src: url(${NanumSquareLEot} format('embedded-opentype'),
+      url(${NanumSquareLWoff} format('woff'),
+      url(${NanumSquareLTTf} format('truetype');
+}
+`
