@@ -8,9 +8,9 @@ import { WatermarkDIV } from "./components/core/watermark"
 import { LoadingScDIV } from "./components/core/loading_sc"
 import { FooterDIV } from "./components/core/FooterDIV"
 import ContentDIV from "./views/content"
-import { Lunch } from "./core/mainCore"
-import "./core/firstLoad"
-import "./core/func"
+import { Lunch } from "./utils/mainCore"
+import "./utils/firstLoad"
+import "./utils/func"
 
 const mainElement = document.createElement('body')
 document.body.appendChild(mainElement)

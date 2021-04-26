@@ -1,6 +1,8 @@
-import React, { Component, FunctionComponent } from "react"
-import axios from 'axios'
-
+import React, { Component, useState } from "react"
+import axios, { AxiosResponse } from 'axios'
+import { BACKEND_URL } from "./../../config"
+import { OpenWeatherMap, WeatherComponentInterface, weatherData} from "../../interface/weatherInterface"
+import { fetchOpenWeatherMapAPI } from "../../utils/endpoint"
 
 interface DateInfoConstructor {
     dt: string,
@@ -111,7 +113,7 @@ class ListLunch extends Component<{}, RespMeal> {
         }
     }
     componentDidMount(){
-        const url = "http://127.0.0.1:8074/v1/lunch"
+        const url = "https://"+BACKEND_URL+"/v1/dashboard/meals/lunch"
 
         axios.get(url).then(
             response => this.setState(
@@ -148,7 +150,7 @@ class ListDinner extends Component<{}, RespMeal> {
         }
     }
     componentDidMount(){
-        const url = "http://127.0.0.1:8074/v1/dinner"
+        const url = "https://"+BACKEND_URL+"/v1/dashboard/meals/dinner"
 
         axios.get(url).then(
             response => this.setState(
@@ -208,6 +210,68 @@ export class SchoolInfo extends Component {
 }
 
 
+
+class TopWeather extends Component<{}, OpenWeatherMap> {
+    constructor(props: any) {
+        super(props)
+        this.state = {
+            status: true,
+            system: {
+                code: 0,
+                message: ""
+            },
+            data: null
+        }
+    } 
+
+    componentDidMount() {
+        var nextDate = new Date();
+
+        const dt = () =>  {
+            return fetchOpenWeatherMapAPI().then(
+                data => this.setState(
+                    {
+                        status: data.status,
+                        system: data.system,
+                        data: data.data
+                    }
+                )
+            )
+        }
+        if (nextDate.getMinutes() === 0) {
+            dt()
+        } else {
+            nextDate.setHours(nextDate.getHours() + 1);
+            nextDate.setMinutes(0);
+            nextDate.setSeconds(0);// I wouldn't do milliseconds too ;)
+
+            const difference = nextDate.getDate();
+            setTimeout(dt, difference);
+        }
+    }
+    public render() {
+        const nowWeather =  () => {
+            if (this.state.data != null) {
+                return this.state.data.weather.description
+            }
+        }
+        const nowTemperature = () => {
+            if (this.state.data != null) {
+                return this.state.data.main.temp
+            }
+        }
+        return (
+            <>
+            <span id="temperature" className="temp font-weight700">{nowTemperature()}°</span>
+            <span id="weather" className="weather padding_l07 padding_r2 font-weight300">{nowWeather()}</span>
+            </>
+        )
+
+    }
+    
+}
+
+
 export interface TimeConstructor {
     hours: string,
     minutes: string,
@@ -215,7 +279,8 @@ export interface TimeConstructor {
 }
 
 interface DateConstructor {
-    time: TimeConstructor
+    time: TimeConstructor,
+
 }
 
 export class ScTimeInfo extends Component<{}, DateConstructor> {
@@ -223,7 +288,9 @@ export class ScTimeInfo extends Component<{}, DateConstructor> {
     constructor(props: any) {
         super(props);
 
-        this.state = {time: this.DayTime()};
+        this.state = {
+            time: this.DayTime()
+        };
         
     }
     
@@ -247,6 +314,7 @@ export class ScTimeInfo extends Component<{}, DateConstructor> {
         return obj
     }
 
+    // JSON.parse(JSON.stringify(this.state.data, null, 2))
     componentDidMount() {
         setInterval(() => this.setState({time: this.DayTime()}), 1000);
     }
@@ -263,9 +331,9 @@ export class ScTimeInfo extends Component<{}, DateConstructor> {
                     <span className="clock_blink">:</span>
                     <span id="second">{this.state.time.seconds}</span>
                 </span>
+
                 <span className="bar">  |  </span>
-                <span id="temperature" className="temp font-weight700">00°</span>
-                <span id="weather" className="weather padding_l07 padding_r2 font-weight300">알 수 없음</span>
+                <TopWeather />
             </div>
         </div>
         );
@@ -274,13 +342,55 @@ export class ScTimeInfo extends Component<{}, DateConstructor> {
     
 }
 
-export class WeatherInfo extends Component {
+
+export class WeatherInfo extends Component<{}, OpenWeatherMap> {
     constructor(props: any) {
         super(props)
+        this.state = {
+            status: true,
+            system: {
+                code: 0,
+                message: ""
+            },
+            data: null
+        }
+    } 
+    // JSON.parse(JSON.stringify(this.state.data, null, 2))
+    componentDidMount() {
+        var nextDate = new Date();
+
+        const dt = () =>  {
+            return fetchOpenWeatherMapAPI().then(
+                data => this.setState(
+                    {
+                        status: data.status,
+                        system: data.system,
+                        data: data.data
+                    }
+                )
+            )
+        }
+        if (nextDate.getMinutes() === 0) {
+            dt()
+        } else {
+            nextDate.setHours(nextDate.getHours() + 1);
+            nextDate.setMinutes(0);
+            nextDate.setSeconds(0);// I wouldn't do milliseconds too ;)
+
+            const difference = nextDate.getDate();
+            setTimeout(dt, difference);
+        }
+
 
     }
 
     public render() {
+        const nowWeather =  () => {
+            if (this.state.data != null) {
+                return this.state.data.weather.description
+            }
+        }
+
         return (
         <div className="weather_info font-weight300">
             <div className="weather_info-text">
@@ -290,7 +400,7 @@ export class WeatherInfo extends Component {
             </div>
             <div className="weather_info-text">
                 <span className="info-title">현재 날씨</span>
-                <span id="now_weather" className="font-weight800">알 수 없음</span>
+                <span id="now_weather" className="font-weight800">{nowWeather()}</span>
             </div>
             <div className="weather_info-text">
                 <span className="info-title">강수 확률</span>
