@@ -1,0 +1,11 @@
+directories:
+  output: packages
+  buildResources: build
+appId: zeroday0619
+mac:
+  category: public.app-category.video
+files:
+  - filter:
+      - package.json
+      - dist/**
+electronVersion: 8.5.5

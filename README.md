@@ -1,4 +1,15 @@
-dashboard
-=========
+KHLIFEDASH 3.0
+==============
+> 경희라이프 대시보드
 
-(WIP) [rewrite version] 경희라이프 대시보드 클라이언트
+## License
+
+Distributed under the [MIT License](./LICENSE)
+
+Copyright (c) 2021 Kyunghee LIFE
+
+- [Woncheol Jung](#)
+- [Euiseo Cha](https://github.com/zeroday0619)
+- [Yunho Kim](#)
+- [Minjae Ju](#)
+

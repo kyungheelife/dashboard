@@ -220,13 +220,17 @@ div#watermark {
 }
 
 .temp {
-  font-size: 3.7vw;
   vertical-align: super;
+  font-size: 3.7vw;
 }
 
 .weather {
-  font-size: 2.6vw;
-  vertical-align: text-bottom;
+  vertical-align: bottom;
+}
+
+.weImg {
+  max-width: 67%;
+  max-height: 67%;
 }
 
 .clock_blink {

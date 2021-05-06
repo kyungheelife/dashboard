@@ -1,1 +1,1 @@
-export const BACKEND_URL = "127.0.0.1";
+export const BACKEND_URL = process.env.BACKEND_URL;
