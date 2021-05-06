@@ -3,7 +3,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=reactnative,node,macos,vscode
 
 src/config.ts
-
+packages/
+packages/*
 ### macOS ###
 # General
 .DS_Store

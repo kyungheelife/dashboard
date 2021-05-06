@@ -86,9 +86,12 @@
     "styled-components": "^5.2.3"
   },
   "build": {
-    "appId": "zeroday0619",
+    "appId": "KHLIFEDash.zeroday0619.dev",
     "mac": {
       "category": "public.app-category.video"
+    },
+    "win": {
+      "target": "NSIS"
     },
     "directories": {
       "output": "packages"
