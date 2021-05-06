@@ -11,5 +11,4 @@ Copyright (c) 2021 Kyunghee LIFE
 - [Woncheol Jung](#)
 - [Euiseo Cha](https://github.com/zeroday0619)
 - [Yunho Kim](#)
-- [Minjae Ju](#)
-
+- [Minjae Ju](https://github.com/Juminjae)
