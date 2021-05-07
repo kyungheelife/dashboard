@@ -26,10 +26,27 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         architecture: 'x64'
+    - name: package-version
+      run: node -p -e '`PACKAGE_VERSION=${require("./package.json").version}`' >> $GITHUB_ENV
+    - name: package-version-to-git-tag
+      uses: pkgdeps/git-tag-action@v2
+      with:
+        github_token: ${{ secrets.GH_TOKEN }}
+        github_repo: ${{ github.repository }}
+        version: ${{ env.PACKAGE_VERSION }}
+        git_commit_sha: ${{ github.sha }}
+        git_tag_prefix: "v"
+        
+    - name: Release Drafter
+      id: release_drafter
+      uses: release-drafter/release-drafter@v5
+      with:
+        config-name: release-drafter.yml
+        version: ${{ env.PACKAGE_VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }
+
     - run: git submodule update --init --recursive         
-    - run: npm install -g yarn
-    - run: yarn install
-    - run: npm run package
     - name: Build/release Electron app
       uses: samuelmeuli/action-electron-builder@v1
       with:
