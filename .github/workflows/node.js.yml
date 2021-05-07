@@ -25,7 +25,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         architecture: 'x64'
     - name: package-version
-      run: node -p -e "PACKAGE_VERSION=require('./package.json').version" >> $Env:GITHUB_ENV
+      run: echo("PACKAGE_VERSION=" + $(node -p -e "require('./package.json').version") >> $GITHUB_ENV
       
     - name: package-version-to-git-tag
       uses: pkgdeps/git-tag-action@v2
