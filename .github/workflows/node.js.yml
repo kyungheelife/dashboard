@@ -44,7 +44,7 @@ jobs:
         config-name: release-drafter.yml
         version: ${{ env.PACKAGE_VERSION }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     - run: git submodule update --init --recursive         
     - name: Build/release Electron app
