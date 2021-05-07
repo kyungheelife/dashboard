@@ -28,10 +28,11 @@ jobs:
         architecture: 'x64'
     - name: package-version
       run: node -p -e "PACKAGE_VERSION=require('./package.json').version" >> $GITHUB_ENV
+      
     - name: package-version-to-git-tag
       uses: pkgdeps/git-tag-action@v2
       with:
-        github_token: ${{ secrets.GH_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         github_repo: ${{ github.repository }}
         version: ${{ env.PACKAGE_VERSION }}
         git_commit_sha: ${{ github.sha }}
@@ -44,7 +45,7 @@ jobs:
         config-name: release-drafter.yml
         version: ${{ env.PACKAGE_VERSION }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - run: git submodule update --init --recursive         
     - name: Build/release Electron app
