@@ -30,9 +30,9 @@ jobs:
     - name: package-version-to-git-tag
       uses: pkgdeps/git-tag-action@v2
       with:
+        VERSION: ${{ env.PACKAGE_VERSION }}
         github_token: ${{ secrets.GITHUB_TOKEN }}
         github_repo: ${{ github.repository }}
-        version: ${{ env.PACKAGE_VERSION }}
         git_commit_sha: ${{ github.sha }}
         git_tag_prefix: "v"
         
