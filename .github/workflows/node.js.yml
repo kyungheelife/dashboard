@@ -6,8 +6,6 @@ name: CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -26,7 +24,35 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         architecture: 'x64'
+    - name: package-version
+      run: echo("PACKAGE_VERSION=" + $(node -p -e "require('./package.json').version")) >> $env:GITHUB_ENV
+      
+    - name: package-version-to-git-tag
+      uses: pkgdeps/git-tag-action@v2
+      with:
+        VERSION: ${{ env.PACKAGE_VERSION }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_repo: ${{ github.repository }}
+        git_commit_sha: ${{ github.sha }}
+        git_tag_prefix: "v"
+        
+    - name: Release Drafter
+      id: release_drafter
+      uses: release-drafter/release-drafter@v5
+      with:
+        config-name: release-drafter.yml
+        version: ${{ env.PACKAGE_VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - run: git submodule update --init --recursive         
-    - run: npm install -g yarn
-    - run: yarn install
-    - run: npm run package
+    - name: Build/release Electron app
+      uses: samuelmeuli/action-electron-builder@v1
+      with:
+        # GitHub token, automatically provided to the action
+        # (No need to define this secret in the repo settings)
+        github_token: ${{ secrets.github_token }}
+
+        # If the commit is tagged with a version (e.g. "v1.0.0"),
+        # release the app after building
+        release: ${{ startsWith(github.ref, 'refs/tags/v') }}
