@@ -27,7 +27,7 @@ export default class ContentDIV extends Component {
                 </div>
                 <div className="content">
                     <div className="left float-left">
-                        <DateInfo />                        
+                        <DateInfo />               
                         <WeatherInfo />
                         <WeEventInfo />
                     </div>

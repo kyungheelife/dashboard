@@ -1,12 +1,12 @@
-import React, { Component, useState } from "react"
-import axios, { AxiosResponse } from 'axios'
-import { BACKEND_URL } from "./../../config"
+import React, { Component } from "react"
 import { WeatherICON } from "../../styles/weatherIcon"
-import { OpenWeatherMap, WeatherComponentInterface, weatherData} from "../../interface/weatherInterface"
-import { fetchOpenWeatherMapAPI, fetchLunch, fetchDinner } from "../../utils/endpoint"
-import { MealCoreComponent } from "../../interface/mealInterface"
-import { CovidCoreComponent, CoreCovid } from "../../interface/covidInterface"
-import { fetchTotalCovid } from "../../utils/endpoint"
+import { OpenWeatherMap, weatherMain, weatherInterface, weatherData } from "../../interface/weatherInterface"
+
+import { CoreMeal, MealCoreComponent } from "../../interface/mealInterface"
+import { CoreCovid } from "../../interface/covidInterface"
+import { BACKEND_URL } from "../../config"
+
+
 interface DateInfoConstructor {
     dt: string,
     dy: string
@@ -103,12 +103,85 @@ export class EventDIV extends Component {
 
 
 
-interface RespMeal {
-    data: string[]
+
+
+
+export class ListLunch extends Component<{}, MealCoreComponent> {
+    constructor(props: any){
+        super(props)
+        this.state  = {
+            data: {
+                status: true,
+                system: {
+                    code: 0,
+                    message: ""
+                },
+                data: null
+            }
+        }    
+    }
+
+    componentDidMount(){
+        const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/school/lunch")
+
+        const connectLunch = () => {
+            ws.onopen = () => { 
+                ws.send(JSON.stringify({"message": "ping"})
+            )};
+
+            ws.onmessage = (event: MessageEvent) => {
+                console.log('Message:', event.data);
+                
+                const data: CoreMeal = JSON.parse(event.data)
+                this.setState({ data: data })
+            }
+            
+            ws.onclose = (event: CloseEvent) => {
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason)
+                setTimeout(() => {
+                    connectLunch()
+                }, 1000);
+            }
+
+            ws.onerror = (event: Event) => {
+                console.error('Socket encountered error: ', event, 'Closing socket');
+                ws.close()
+            }
+        }
+        connectLunch()
+    }
+    public render() {
+        const lunch = () => {
+            if (this.state.data.data == null){
+                const array = new Array()
+                const a = [
+                    "정보를 받아올 수 없습니다."
+                ]
+                for(const i in a){
+                    array.push(a[i])
+                }
+                const list: string[] = array;
+                console.log(list)
+                return list
+            }
+            const a = JSON.parse(JSON.stringify(this.state.data.data, null, 2))
+            const array = new Array()
+            for(const i in a){
+                array.push(a[i])
+            }
+            const list: string[] = array;
+            console.log(list)
+            return list
+        }
+
+        return (
+            <div id="lunch" className="meal_info-list">{lunch().map(str => (<div id="lunch">{str}</div>))}</div>
+        )
+    }  
 }
 
 
-class ListLunch extends Component<{}, MealCoreComponent> {
+export class ListDinner extends Component<{}, MealCoreComponent> {
     constructor(props: any) {
         super(props)
         this.state = {
@@ -122,95 +195,65 @@ class ListLunch extends Component<{}, MealCoreComponent> {
             }
         }
     }
+
+
     componentDidMount(){
-        fetchLunch().then(
-            response => this.setState({
-                data: response
-            })
-        )
+        const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/school/dinner")
+        const connectDinner = () => {
+            ws.onopen = () => { 
+                ws.send(JSON.stringify({"message": "ping"})
+            )};
+
+            ws.onmessage = (event: MessageEvent) => {
+                console.log('Message:', event.data);
+
+                const data: CoreMeal = JSON.parse(event.data)
+                this.setState({ data: data })
+            }
+            
+            ws.onclose = (event: CloseEvent) => {
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason)
+                setTimeout(() => {
+                    connectDinner()
+                }, 1000);
+            }
+            ws.onerror = (event: Event) => {
+                console.error('Socket encountered error: ', event, 'Closing socket');
+                ws.close()
+            }
+        }
+        connectDinner()
     }
     public render() {
-        const lca = () => {
+        const dinner = () => {
             if (this.state.data.data == null){
-                let array = new Array()
+                const array = new Array()
                 const a = [
-                    "정보를 받아올 수<br>없습니다."
+                    "정보를 받아올 수 없습니다."
                 ]
-                for(let i in a){
+                for(const i in a){
                     array.push(a[i])
                 }
-                let list: string[] = array;
+                const list: string[] = array;
                 console.log(list)
                 return list
             }
-            let a = JSON.parse(JSON.stringify(this.state.data.data, null, 2))
-            let array = new Array()
-            for(let i in a){
+            const a = JSON.parse(JSON.stringify(this.state.data.data, null, 2))
+            const array = new Array()
+            for(const i in a){
                 array.push(a[i])
             }
-            let list: string[] = array;
-            console.log(list)
-            return list
-        }
-
-        return (
-            <div id="lunch" className="meal_info-list">{lca().map(str => (<div id="lunch">{str}</div>))}</div>
-        )
-    }   
-}
-
-
-class ListDinner extends Component<{}, MealCoreComponent> {
-    constructor(props: any) {
-        super(props)
-        this.state = {
-            data: {
-                status: true,
-                system: {
-                    code: 0,
-                    message: ""
-                },
-                data: null
-            }
-        }
-    }
-    componentDidMount(){
-        fetchDinner().then(
-            resp => this.setState({
-                data: resp
-            })
-        )
-    }
-    public render() {
-        const lca = () => {
-            if (this.state.data.data == null){
-                let array = new Array()
-                const a = [
-                    "정보를 받아올 수<br>없습니다."
-                ]
-                for(let i in a){
-                    array.push(a[i])
-                }
-                let list: string[] = array;
-                console.log(list)
-                return list
-            }
-            let a = JSON.parse(JSON.stringify(this.state.data.data, null, 2))
-            let array = new Array()
-            for(let i in a){
-                array.push(a[i])
-            }
-            let list: string[] = array;
+            const list: string[] = array;
             console.log(list)
             return list
         }
         return (
-            <div id="dinner" className="meal_info-list">{lca().map(str => (<div id="dinner">{str}</div>))}</div>
+            <div id="dinner" className="meal_info-list">{dinner().map(str => (<div id="dinner">{str}</div>))}</div>
         )
     }   
 }
 
-export class MealInfo extends Component<{}, RespMeal> {
+export class MealInfo extends Component {
     public render() {
         return (
         <div className="meal_info">
@@ -252,59 +295,133 @@ class TopWeather extends Component<{}, OpenWeatherMap> {
             },
             data: null
         }
-    } 
+    }
+    /*
+    setState = (value: OpenWeatherMap) => {
+
+        const defaultMain: weatherMain = {
+            temp: "정보없음",
+            temp_max: "정보없음",
+            temp_min: "정보없음",
+            feels_like: "정보없음",
+            pressure: "정보없음",
+            humidity: "정보없음"
+        }
+        const defaultWeather: weatherInterface = {
+            id: "정보없음",
+            main: "정보없음",
+            description: "정보없음",
+            icon: "정보없음"
+        }
+        if (value.data != null) {
+            if (typeof value.data !== "string"){
+                let temp = value.data
+                this.state = {
+                    status: value.status,
+                    system: {
+                        code: value.system.code,
+                        message: value.system.message
+                    },
+                    data: temp
+                }
+                useState(this.state)
+            }
+        } else {
+            this.state = {
+                status: value.status,
+                system: {
+                    code: value.system.code,
+                    message: value.system.message
+                },
+                data: {
+                    main: defaultMain,
+                    weather: defaultWeather
+                }   
+            }
+            useState(this.state)
+        }
+
+    }
+    */
+
 
     componentDidMount() {
-        var nextDate = new Date();
+        const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/weather/openweathermap")
+        const connect = () => {
+            ws.onopen = function() { 
+                ws.send(JSON.stringify({"message": "ping"})
+            )};
 
-        const dt = () =>  {
-            return fetchOpenWeatherMapAPI().then(
-                data => this.setState(
-                    {
-                        status: data.status,
-                        system: data.system,
-                        data: data.data
-                    }
-                )
-            )
-        }
-        if (nextDate.getMinutes() === 0) {
-            dt()
-        } else {
-            nextDate.setHours(nextDate.getHours() + 1);
-            nextDate.setMinutes(0);
-            nextDate.setSeconds(0);// I wouldn't do milliseconds too ;)
-
-            const difference = nextDate.getDate();
-            setTimeout(dt, difference);
-        }
-    }
-    public render() {
-        const float2int = (value: any) => {
-            return value | 0;
-        }        
-        const nowWeather =  () => {
-            if (this.state.data != null) {
-                let status = this.state.data.weather.main
-                let iconCode = this.state.data.weather.icon
+            ws.onmessage = (event: MessageEvent) => {
+                console.log('Message:', event.data);
                 
-                return [iconCode, status]
-            } else {
-                return ["unknown", "정보없음"]
+                const data: OpenWeatherMap = JSON.parse(event.data)
+                this.setState({
+                    status: data.status,
+                    system: data.system,
+                    data: data.data
+                })    
+            }
+            
+            ws.onclose = (event: CloseEvent) => {
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason)
+                setTimeout(() => {
+                    connect()
+                }, 1000);
+            }
+
+            ws.onerror = (event: Event) => {
+                console.error('Socket encountered error: ', event, 'Closing socket');
+                ws.close()
             }
         }
-        const nowTemperature = () => {
+        connect()
+    }
+    public render() {
+        const typeChecker = () => {
             if (this.state.data != null) {
-                return this.state.data.main.temp
+                if (typeof this.state.data !== "string") {
+                    return this.state.data
+                }
+                return "정보없음"
+            }
+            return "정보없음"
+        }
+        const TempVerify = (value: weatherData | string) => {
+            if (typeof value !== "string") {
+                if (typeof value.main !== "string") {
+                    return value.main.temp
+                }
+            } else {
+                return null
+            }
+        }
+        const IconVerify = (value: weatherData | string) => {
+            if (typeof value !== "string") {
+                if (typeof value.weather !== "string") {
+                    return value.weather.icon
+                } else {
+                    return "X"
+                }
+            } else {
+                return "X"
+            }
+        }
+        const float2int = (value: any) => {
+            if (value != null) {
+                if (value == "정보없음") {
+                    return value
+                }
+                return value | 0;
             } else {
                 return "정보없음"
             }
         }
         return (
             <>
-            <span id="temperature" className="temp font-weight700">{float2int(nowTemperature())}°</span>
+            <span id="temperature" className="temp font-weight700">{float2int(TempVerify(typeChecker()))}°</span>
             <span className="weather padding_l07 padding_r2" id="weather">
-                <img className="weImg" id="weImg" src={WeatherICON(nowWeather()[0])}></img>
+                <img className="weImg" id="weImg" src={WeatherICON(IconVerify(typeChecker()))}></img>
             </span>
             </>
         )
@@ -397,29 +514,39 @@ class CovidInfo extends Component<{}, CoreCovid> {
             source: null
         }
     }
-    componentDidMount() {
-        let nextDate = new Date();
 
-        const da = () => {
-            return fetchTotalCovid().then(
-                data => this.setState({ 
+    componentDidMount() {
+        const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/covid19/total")
+
+        const connect = () => {
+            ws.onopen = function() { 
+                ws.send(JSON.stringify({"message": "ping"})
+            )};
+
+            ws.onmessage = (event: MessageEvent) => {
+                console.log('Message:', event.data);
+                
+                const data: CoreCovid = JSON.parse(event.data)
+                this.setState({
                     status: data.status,
                     system: data.system,
-                    source: data.source,
-                })
-            )
-        }
-        if (nextDate.getMinutes() === 0) {
-            da()
-        } else {
-            nextDate.setHours(nextDate.getHours() + 1);
-            nextDate.setMinutes(0);
-            nextDate.setSeconds(0);// I wouldn't do milliseconds too ;)
+                    source: data.source
+                })    
+            }
+            
+            ws.onclose = (event: CloseEvent) => {
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason)
+                setTimeout(() => {
+                    connect()
+                }, 1000);
+            }
 
-            const difference = nextDate.getDate();
-            setTimeout(da, difference);
+            ws.onerror = (event: Event) => {
+                console.error('Socket encountered error: ', event, 'Closing socket');
+                ws.close()
+            }
         }
-
+        connect()
     }
 
     public render() {
@@ -432,9 +559,8 @@ class CovidInfo extends Component<{}, CoreCovid> {
         }
         return (
         <div className="weather_info-text">
-            <span className="info-title">오늘 SARS-CoV-2 확진자</span>
-            <span id="air_quality" className="font-weight800">{dailyChange()}
-            </span>
+            <span className="info-title">금일 COVID-19 확진자</span>
+            <span id="air_quality" className="font-weight800">{dailyChange()}명</span>
             <span id="air_quality_num" className="font-weight800 padding_l07"></span>
         </div>
         )
@@ -452,51 +578,112 @@ export class WeatherInfo extends Component<{}, OpenWeatherMap> {
             },
             data: null
         }
-    } 
+    }
+    /*
+    setState = (value: OpenWeatherMap) => {
+
+        const defaultMain: weatherMain = {
+            temp: "정보없음",
+            temp_max: "정보없음",
+            temp_min: "정보없음",
+            feels_like: "정보없음",
+            pressure: "정보없음",
+            humidity: "정보없음"
+        }
+        const defaultWeather: weatherInterface = {
+            id: "정보없음",
+            main: "정보없음",
+            description: "정보없음",
+            icon: "정보없음"
+        }
+        if (value.data != null) {
+            if (typeof value.data !== "string"){ 
+                let temp = value.data
+                this.state = {
+                    status: value.status,
+                    system: {
+                        code: value.system.code,
+                        message: value.system.message
+                    },
+                    data: temp
+                }
+                useState(this.state)
+            }
+        } else {
+            this.state = {
+                status: value.status,
+                system: {
+                    code: value.system.code,
+                    message: value.system.message
+                },
+                data: {
+                    main: defaultMain,
+                    weather: defaultWeather
+                }   
+            }
+            useState(this.state)
+        }
+
+    }
+    */
+
     // JSON.parse(JSON.stringify(this.state.data, null, 2))
     componentDidMount() {
-        let nextDate = new Date();
+        const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/weather/openweathermap")
+        const connect = () => {
+            ws.onopen = function() { 
+                ws.send(JSON.stringify({"message": "ping"})
+            )};
 
-        const dt = () =>  {
-            return fetchOpenWeatherMapAPI().then(
-                data => this.setState(
-                    {
-                        status: data.status,
-                        system: data.system,
-                        data: data.data
-                    }
-                )
-            )
+            ws.onmessage = (event: MessageEvent) => {
+                console.log('Message:', event.data);
+                
+                const data: OpenWeatherMap = JSON.parse(event.data)
+                this.setState({
+                    status: data.status,
+                    system: data.system,
+                    data: data.data
+                })    
+            }
+            
+            ws.onclose = (event: CloseEvent) => {
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason)
+                setTimeout(() => {
+                    connect()
+                }, 1000);
+            }
+
+            ws.onerror = (event: Event) => {
+                console.error('Socket encountered error: ', event, 'Closing socket');
+                ws.close()
+            }
         }
-        
-        if (nextDate.getMinutes() === 0) {
-            dt()
-        } else {
-            nextDate.setHours(nextDate.getHours() + 1);
-            nextDate.setMinutes(0);
-            nextDate.setSeconds(0);// I wouldn't do milliseconds too ;)
-
-            const difference = nextDate.getDate();
-            setTimeout(dt, difference);
-        }
-
-
+        connect()
     }
 
     public render() {
         const nowWeather =  () => {
             if (this.state.data != null) {
-                return this.state.data.weather.main
+                if (typeof this.state.data !== "string"){
+                    if (typeof this.state.data.weather !== "string"){
+                        return this.state.data.weather.main
+                    } else {
+                        return "정보없음"
+                    }
+                } else {
+                    return "정보없음"
+                }
             } else {
                 return "정보없음"
             }
         }
-
         return (
         <div className="weather_info font-weight300">
             <div className="weather_info-text">
                 <span className="info-title">현재 날씨</span>
-                <span id="now_weather" className="font-weight800">{nowWeather()}</span>
+                <span id="now_weather" className="font-weight800">
+                    {nowWeather()}
+                </span>
             </div>
             <CovidInfo />
         </div>

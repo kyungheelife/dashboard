@@ -36,15 +36,6 @@ jobs:
         git_commit_sha: ${{ github.sha }}
         git_tag_prefix: "v"
         
-    - name: Release Drafter
-      id: release_drafter
-      uses: release-drafter/release-drafter@v5
-      with:
-        config-name: release-drafter.yml
-        version: ${{ env.PACKAGE_VERSION }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - run: git submodule update --init --recursive         
     - name: Build/release Electron app
       uses: samuelmeuli/action-electron-builder@v1
