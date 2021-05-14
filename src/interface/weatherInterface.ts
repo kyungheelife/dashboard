@@ -1,22 +1,22 @@
 export interface weatherMain {
-    temp: number,
-    feels_like: number,
-    temp_min: number,
-    temp_max: number,
-    pressure: number,
-    humidity: number
+    temp: number | string,
+    feels_like: number | string,
+    temp_min: number | string,
+    temp_max: number | string,
+    pressure: number | string,
+    humidity: number | string,
 }
 
 export interface weatherInterface {
-    id: number,
+    id: number | string,
     main: string,
     description: string,
     icon: string   
 }
 
 export interface weatherData {
-    main: weatherMain,
-    weather: weatherInterface
+    main: weatherMain | string
+    weather: weatherInterface | string
 }
 export interface system {
     code: number;
