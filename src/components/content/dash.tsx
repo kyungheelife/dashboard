@@ -126,7 +126,12 @@ export class ListLunch extends Component<{}, MealCoreComponent> {
 
         const connectLunch = () => {
             ws.onopen = () => { 
-                ws.send(JSON.stringify({"message": "ping"})
+                ws.send(JSON.stringify({"message": "ping"})) 
+                
+                setInterval(() => { 
+                    ws.send(JSON.stringify({"message": "ping"})) 
+                },
+                30000
             )};
 
             ws.onmessage = (event: MessageEvent) => {
@@ -201,16 +206,18 @@ export class ListDinner extends Component<{}, MealCoreComponent> {
         const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/school/dinner")
         const connectDinner = () => {
             ws.onopen = () => { 
-                ws.send(JSON.stringify({"message": "ping"})
-            )};
+                ws.send(JSON.stringify({"message": "ping"}))
+                setInterval(() => {ws.send(JSON.stringify({"message": "ping"}))}, 30000) 
+            };
 
             ws.onmessage = (event: MessageEvent) => {
                 console.log('Message:', event.data);
 
                 const data: CoreMeal = JSON.parse(event.data)
+
                 this.setState({ data: data })
+                // setInterval(() => {ws.send(JSON.stringify({"message": "ping"}))}, 1000);
             }
-            
             ws.onclose = (event: CloseEvent) => {
                 console.log('Socket is closed. Reconnect will be attempted in 1 second.', event.reason)
                 setTimeout(() => {
@@ -348,8 +355,12 @@ class TopWeather extends Component<{}, OpenWeatherMap> {
     componentDidMount() {
         const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/weather/openweathermap")
         const connect = () => {
-            ws.onopen = function() { 
-                ws.send(JSON.stringify({"message": "ping"})
+            ws.onopen = () => {
+                ws.send(JSON.stringify({"message": "ping"}))  
+                setInterval(() => { 
+                    ws.send(JSON.stringify({"message": "ping"})) 
+                },
+                30000
             )};
 
             ws.onmessage = (event: MessageEvent) => {
@@ -519,8 +530,12 @@ class CovidInfo extends Component<{}, CoreCovid> {
         const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/covid19/total")
 
         const connect = () => {
-            ws.onopen = function() { 
-                ws.send(JSON.stringify({"message": "ping"})
+            ws.onopen = () => { 
+                ws.send(JSON.stringify({"message": "ping"})) 
+                setInterval(() => { 
+                    ws.send(JSON.stringify({"message": "ping"})) 
+                },
+                30000
             )};
 
             ws.onmessage = (event: MessageEvent) => {
@@ -631,8 +646,12 @@ export class WeatherInfo extends Component<{}, OpenWeatherMap> {
     componentDidMount() {
         const ws = new WebSocket(BACKEND_URL()+"/v1/ws/dashboard/weather/openweathermap")
         const connect = () => {
-            ws.onopen = function() { 
-                ws.send(JSON.stringify({"message": "ping"})
+            ws.onopen = () => { 
+                ws.send(JSON.stringify({"message": "ping"})) 
+                setInterval(() => { 
+                    ws.send(JSON.stringify({"message": "ping"})) 
+                },
+                30000
             )};
 
             ws.onmessage = (event: MessageEvent) => {
