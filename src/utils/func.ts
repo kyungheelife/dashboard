@@ -1,6 +1,5 @@
 import $ from "jquery"
 
-
 export const mainLoading = () => {
     $("#loadingScreen").css("animation", "loadingscreen_visible 1.2s ease both");
     $("#loadingScreen").one("animationend", () => {
@@ -20,7 +19,7 @@ export const mainLoading = () => {
     });
 
     $("#loadingScreen").one("animationend", () => {
-
+    
     });
 }
 
@@ -46,10 +45,10 @@ export const contentVisible = (value: boolean= true) => {
 }
 
 
-export const imageSlider = (value: boolean = true) => {
+export const imageSlider = (value: boolean = false) => {
     if(value == true) {
-        $("#image_slider").css("animation", "content_change 0.7s ease both");
-    } else {
+         $("#image_slider").css("animation", "content_change 0.7s ease both");
+     } else {
         $("#image_slider").css("animation", "content_change 0.7s reverse both");
     }
 }
