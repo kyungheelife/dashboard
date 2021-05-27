@@ -1,6 +1,6 @@
 {
   "name": "KHLIFEDash",
-  "version": "v3.0.1",
+  "version": "v3.0.2",
   "main": "./dist/main.js",
   "scripts": {
     "dev": "npm-run-all -p dev:react electron:serve",
@@ -88,7 +88,8 @@
     "rxjs": "^7.0.0",
     "school-kr": "^3.1.2",
     "socket.io-client": "^4.0.2",
-    "styled-components": "^5.2.3"
+    "styled-components": "^5.2.3",
+    "typed-emitter": "^1.3.1"
   },
   "build": {
     "appId": "KHLIFEDash.zeroday0619.dev",

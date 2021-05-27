@@ -18,9 +18,12 @@ export const OpenDashboard = () => {
             }
         }
     )
-    dash.once("ready-to-show", () => {
-      dash.show();
+    app.allowRendererProcessReuse = false;
+
+    dash.webContents.on('did-finish-load', () => {
+        dash.show()
     });
+
     if (process.env.NODE_ENV === 'development'){
         dash.loadURL('http://localhost:4000')
 
@@ -28,9 +31,8 @@ export const OpenDashboard = () => {
         dash.loadURL('file:'+path.join(__dirname, 'renderer/index.html'))
     }
     dash.on("closed", () => {
-      app.quit();
+        app.quit();
     });
-    
 }
 
 app.on("ready", OpenDashboard);
@@ -38,4 +40,4 @@ app.on("ready", OpenDashboard);
 app.on("window-all-closed", () => {
     app.quit();
 });
-app.allowRendererProcessReuse = false;
+
