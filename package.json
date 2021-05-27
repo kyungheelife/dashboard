@@ -1,6 +1,6 @@
 {
   "name": "KHLIFEDash",
-  "version": "v3.0.1",
+  "version": "v3.0.2",
   "main": "./dist/main.js",
   "scripts": {
     "dev": "npm-run-all -p dev:react electron:serve",
