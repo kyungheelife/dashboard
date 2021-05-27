@@ -17,7 +17,7 @@ var slidet: Array<NodeJS.Timeout> = Array()
 var aj_timer: Array<NodeJS.Timeout> = Array()
 
 
-export const showSlides = () => {
+export const showSlides = async () => {
     console.log("on? A: "+on[0])
     console.log("on? B: "+on)
     if(on[0] != 0) {
@@ -50,12 +50,13 @@ export const showSlides = () => {
 
         const r_img = img[slideIndex-1]
         const r_img_attribute = r_img.getAttribute("src")
-        if (r_img_attribute != null) {
-            var reload_img = r_img_attribute.split("?")[0]
-        
-            timestamp = new Date().getTime();
-            $(img[slideIndex-1]).attr('src',`${reload_img}?${timestamp}`)
 
+        timestamp = new Date().getTime();
+    
+        if (r_img_attribute != null) {
+            console.log("null: "+ r_img_attribute)
+            var reload_img = r_img_attribute.split("?")[0]
+            $(r_img).attr('src',`${reload_img}?${timestamp}`)
         }
         
         // 타이머
@@ -69,7 +70,7 @@ export const showSlides = () => {
                 const slides_name_number = slides_name_unknown as number;
                 console.log(slides_name_number)
 
-                slidet[2] = setTimeout(showSlides, slides_name_number);
+                slidet[0] = setTimeout(showSlides, slides_name_number);
             } else {
                 if(slides[slideIndex-1].getAttribute('id') == "movie") { 
                     // img[slideIndex-1].onloadedmetadata = function() {
@@ -83,16 +84,27 @@ export const showSlides = () => {
                     
                     videoElement.addEventListener("onloadedmetadata", function() {
                         console.log(videoElement.duration)
-                        setTimeout(showSlides, (videoElement.duration)*1000);
+                        slidet[0] = setTimeout(showSlides, (videoElement.duration)*1000);
+
                     })
-                    videoElement.play()
+                    console.log(videoElement)
+                    await videoElement.play().then(function(event) {
+                        
+
+                    })
+                } else {
+                    console.log("slide showTime A: "+showTime[0])
+                    slidet[0] = setTimeout(showSlides, showTime[0]);
                 }
-                // console.log("slide showTime B: "+showTime[0])
-                // slidet[1] = setTimeout(showSlides, showTime[0]);
             }
-            console.log("slide showTime A: "+showTime[0])
-            slidet[0] = setTimeout(showSlides, showTime[0]);
+        } else {
+            console.log("slides_name A: "+ slides_name)
+            await showSlides()
         }
+        console.log("slides_name B: "+ slides_name)
+    } else {
+        console.log("slide showTime B: "+showTime[0])
+        slidet[0] = setTimeout(showSlides, showTime[0]);
     }
 }
 
@@ -101,10 +113,10 @@ const aj_time = () => {
         url: `http://${serverIP}:2019/api/timer`,
         success: function(res) {
             if(isNaN(res)) {
-                showTime[0] = (3000);
+                showTime[0] = 3000;
                 console.log("AJ Time A: " + showTime[0])
             } else {
-                showTime[0] = (res);
+                showTime[0] = res;
                 console.log("AJ Time B: " + showTime[0])
             }
         }
@@ -155,9 +167,11 @@ export function aj_image() {
                         on[0] = 1;
                     }
                 }
-                terminate(slidet);
+                terminate(slidet)
                 showSlides()
             }
+            console.log("response: "+ res)
+            console.log("response: "+ image_list)
         }
     });
     aj_timer[0] = setTimeout(aj_image, 1000);
@@ -176,8 +190,7 @@ export const stop = () => {
 }
 
 export const resetSlide = () => {
+    showSlides()
     aj_image()
     aj_time()
-    showSlides()
-    // aj_image()
 }

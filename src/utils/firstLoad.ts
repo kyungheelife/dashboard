@@ -49,8 +49,9 @@ export const firstLoad = () => {
                 }
             }
         })
+        setTimeout(media, 1000)
     }
-    setInterval(() => media(), 1000)
+    setTimeout(media, 1000)
     
     CheckRoutine.once("message", media => {
         console.log(media)

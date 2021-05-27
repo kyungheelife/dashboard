@@ -10,7 +10,7 @@ export const OpenDashboard = () => {
             resizable: false,
             maximizable: false,
             alwaysOnTop: true,
-            fullscreen: false,
+            fullscreen: true,
             icon:`${__dirname}/build/logo.png`,
             show: true,
             webPreferences: {
